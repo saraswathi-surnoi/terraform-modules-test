@@ -17,9 +17,8 @@ data "aws_subnets" "default_vpc_subnets" {
   }
 }
 locals {
-  subnet_ids = data.aws_subnets.default_vpc_subnets.ids
+  subnet_ids = data.aws_subnets.default_vpc_subnets.ids[0]
 }
- 
 # Fetch latest Amazon Linux 2 AMI
 data "aws_ami" "amazon_linux" {
   most_recent = true

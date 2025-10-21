@@ -3,7 +3,7 @@ resource "aws_instance" "jenkins_master" {
   ami                    = var.ami_id
   instance_type          = "t3a.medium"
   key_name               = var.key_name
-  subnet_id              = var.subnet_id
+  subnet_id              = var.subnet_ids[0]
   vpc_security_group_ids = [var.jenkins_master_sg]
   user_data              = file("${path.module}/../user-data/jenkins_master_setup.sh")
   root_block_device {
