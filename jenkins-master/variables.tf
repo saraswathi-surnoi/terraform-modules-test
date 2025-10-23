@@ -5,7 +5,8 @@ variable "key_name" {
 }
 
 variable "public_key_path" {
-  description = "Path to your local public key to create the key pair"
+  description = "Absolute path to your local public key to create the key pair"
   type        = string
-  default     = "~/.ssh/id_rsa.pub"
+  default     = "/home/ubuntu/.ssh/id_rsa.pub"  # replace if different
 }
+
