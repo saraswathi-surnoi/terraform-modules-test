@@ -1,20 +1,34 @@
-variable "ami_id" {}
-variable "key_name" {
-  description = "Existing AWS key pair name to use for EC2 instances"
+variable "ami_id" {
   type        = string
-  default     = "devops"
+  description = "AMI ID for the EC2 instances"
 }
-data "aws_key_pair" "selected" {
-  key_name = var.key_name
+
+variable "key_name" {
+  type        = string
+  description = "Key pair name for SSH"
 }
-locals {
-  key_pair_exists = length(data.aws_key_pair.selected.id) > 0
+
+variable "subnet_id" {
+  type        = string
+  description = "Subnet ID to launch EC2 instances in"
 }
-output "key_pair_name" {
-  value = data.aws_key_pair.selected.key_name
+
+variable "vpc_id" {
+  type        = string
+  description = "VPC ID"
 }
-variable "subnet_id" {}
-variable "vpc_id" {}
-variable "jenkins_master_sg" {}
-variable "backend_sg" {}
-variable "aiml_sg" {}
+
+variable "jenkins_master_sg" {
+  type        = string
+  description = "SG ID for Jenkins Master"
+}
+
+variable "backend_sg" {
+  type        = string
+  description = "SG ID for Backend"
+}
+
+variable "aiml_sg" {
+  type        = string
+  description = "SG ID for AI/ML"
+}
