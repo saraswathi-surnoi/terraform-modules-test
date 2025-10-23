@@ -2,6 +2,7 @@ provider "aws" {
   region = "ap-south-1"
 }
 
+# Data sources
 data "aws_vpc" "default" {
   default = true
 }
@@ -32,6 +33,12 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
+# Key Pair
+resource "aws_key_pair" "devops" {
+  key_name   = var.key_name
+  public_key = file(var.public_key_path)
+}
+
 # Security Groups
 module "sg" {
   source = "../modules/security-group"
@@ -42,10 +49,11 @@ module "sg" {
 module "ec2" {
   source            = "../modules/ec2"
   ami_id            = data.aws_ami.amazon_linux.id
-  key_name          = var.key_name
+  key_name          = aws_key_pair.devops.key_name
   subnet_id         = local.subnet_id
   vpc_id            = data.aws_vpc.default.id
   jenkins_master_sg = module.sg.jenkins_master_sg_id
   backend_sg        = module.sg.backend_sg_id
   aiml_sg           = module.sg.aiml_sg_id
 }
+
