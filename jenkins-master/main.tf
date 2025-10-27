@@ -2,9 +2,7 @@ provider "aws" {
   region = "ap-south-1"
 }
 
-# -------------------------------
-# Data Sources
-# -------------------------------
+# VPC and Subnet Data Sources
 data "aws_vpc" "default" {
   default = true
 }
@@ -20,32 +18,34 @@ locals {
   subnet_id = data.aws_subnets.default_vpc_subnets.ids[0]
 }
 
-# -------------------------------
-# Custom AMI (from your account)
-# -------------------------------
+# Fetch Custom AMI
 data "aws_ami" "surnoi_ubuntu" {
-  owners = ["361769585646"]  # Your AWS Account ID
+  most_recent = true
+  owners      = ["361769585646"]
 
   filter {
     name   = "image-id"
-    values = ["ami-040c28bdc0abf80a8"]  # Your AMI ID
+    values = ["ami-040c28bdc0abf80a8"]
   }
 }
-# -------------------------------
-# Security Groups (via module)
-# -------------------------------
+
+# ✅ Create the Key Pair if it doesn’t exist
+resource "aws_key_pair" "fusioniq" {
+  key_name   = var.key_name
+  public_key = file(var.public_key_path)
+}
+
+# Security Groups
 module "sg" {
   source = "../modules/security-group"
   vpc_id = data.aws_vpc.default.id
 }
 
-# -------------------------------
-# EC2 Instances (via module)
-# -------------------------------
+# EC2 Instances
 module "ec2" {
   source            = "../modules/ec2"
-  ami_id            = data.aws_ami.surnoi_ubuntu.id   # ✅ Corrected reference
-  key_name          = var.key_name
+  ami_id            = data.aws_ami.surnoi_ubuntu.id
+  key_name          = aws_key_pair.fusioniq.key_name  # ✅ fixed
   subnet_id         = local.subnet_id
   vpc_id            = data.aws_vpc.default.id
   jenkins_master_sg = module.sg.jenkins_master_sg_id

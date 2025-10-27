@@ -1,10 +1,11 @@
 variable "ami_id" {
   type        = string
-  description = "AMI ID for the EC2 instances"
+  description = "AMI ID for EC2 instances"
 }
+
 variable "subnet_id" {
   type        = string
-  description = "Subnet ID to launch EC2 instances in"
+  description = "Subnet ID for EC2 instances"
 }
 
 variable "vpc_id" {
@@ -27,5 +28,6 @@ variable "aiml_sg" {
   description = "SG ID for AI/ML"
 }
 variable "key_name" {
-  default = "fusioniq-key"
+  description = "Key pair name for EC2 instances"
+  type        = string
 }
