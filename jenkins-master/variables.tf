@@ -1,7 +1,7 @@
 variable "key_name" {
   description = "Key pair name for EC2 instances. Terraform will create it if it doesn't exist."
   type        = string
-  default     = "devops"
+  default     = "fusioniq"
 }
 
 variable "public_key_path" {

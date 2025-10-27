@@ -18,13 +18,13 @@ locals {
   subnet_id = data.aws_subnets.default_vpc_subnets.ids[0]
 }
 
-data "aws_ami" "amazon_linux" {
+data "aws_ami" "surnoi-ubuntu" {
   most_recent = true
-  owners      = ["amazon"]
+  owners      = ["ami-040c28bdc0abf80a8"]
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+    values = ["surnoi-ubuntu-base-v1.0.0"]
   }
 
   filter {
@@ -34,7 +34,7 @@ data "aws_ami" "amazon_linux" {
 }
 
 # Key Pair
-resource "aws_key_pair" "devops" {
+resource "aws_key_pair" "fusioniq" {
   key_name   = var.key_name
   public_key = file(var.public_key_path)
 }
@@ -48,8 +48,8 @@ module "sg" {
 # EC2 Instances
 module "ec2" {
   source            = "../modules/ec2"
-  ami_id            = data.aws_ami.amazon_linux.id
-  key_name          = aws_key_pair.devops.key_name
+  ami_id            = data.aws_ami.surnoi-ubuntu
+  key_name          = aws_key_pair.fusioniq.key_name
   subnet_id         = local.subnet_id
   vpc_id            = data.aws_vpc.default.id
   jenkins_master_sg = module.sg.jenkins_master_sg_id
