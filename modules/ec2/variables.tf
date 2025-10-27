@@ -28,7 +28,5 @@ variable "aiml_sg" {
   description = "SG ID for AI/ML"
 }
 variable "key_name" {
-  description = "Key pair name for EC2 instances"
-  type        = string
-  default     = "fusioniq"
+  default = "fusioniq"  # Existing key name in AWS console
 }

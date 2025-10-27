@@ -34,12 +34,11 @@ module "sg" {
   source = "../modules/security-group"
   vpc_id = data.aws_vpc.default.id
 }
-
-# EC2 Instances
+# EC2 Instances Module
 module "ec2" {
   source            = "../modules/ec2"
   ami_id            = data.aws_ami.surnoi_ubuntu.id
-  key_name          = aws_key_pair.fusioniq.key_name  # ✅ fixed
+  key_name          = var.key_name
   subnet_id         = local.subnet_id
   vpc_id            = data.aws_vpc.default.id
   jenkins_master_sg = module.sg.jenkins_master_sg_id
