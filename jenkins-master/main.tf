@@ -29,12 +29,6 @@ data "aws_ami" "surnoi_ubuntu" {
   }
 }
 
-# ✅ Create the Key Pair if it doesn’t exist
-resource "aws_key_pair" "fusioniq" {
-  key_name   = var.key_name
-  public_key = file(var.public_key_path)
-}
-
 # Security Groups
 module "sg" {
   source = "../modules/security-group"
