@@ -31,15 +31,6 @@ data "aws_ami" "surnoi_ubuntu" {
     values = ["ami-040c28bdc0abf80a8"]  # Your AMI ID
   }
 }
-
-# -------------------------------
-# Key Pair
-# -------------------------------
-resource "aws_key_pair" "fusioniq" {
-  key_name   = var.key_name
-  public_key = file(var.public_key_path)
-}
-
 # -------------------------------
 # Security Groups (via module)
 # -------------------------------
@@ -54,7 +45,7 @@ module "sg" {
 module "ec2" {
   source            = "../modules/ec2"
   ami_id            = data.aws_ami.surnoi_ubuntu.id   # ✅ Corrected reference
-  key_name          = aws_key_pair.fusioniq.key_name
+  key_name          = var.key_name
   subnet_id         = local.subnet_id
   vpc_id            = data.aws_vpc.default.id
   jenkins_master_sg = module.sg.jenkins_master_sg_id
